@@ -3,9 +3,9 @@
 import path from 'node:path';
 import type { ModelKey, ModelSpec } from './types.ts';
 
-const MODELS_DIR = process.env.QVAC_MODELS_DIR ?? './models';
+// QVAC requires an absolute path for local GGUF files, so resolve here.
+const MODELS_DIR = path.resolve(process.env.QVAC_MODELS_DIR ?? './models');
 
-/** Absolute path to a locally downloaded GGUF (see scripts/download-models.sh) */
 function local(file: string): string {
   return path.join(MODELS_DIR, file);
 }

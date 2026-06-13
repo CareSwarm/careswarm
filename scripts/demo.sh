@@ -5,6 +5,10 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+# Load local config (.env) — e.g. QVAC_MODELS_DIR / QVAC_CACHE_DIR on an
+# external drive. Safe to skip if absent (uses code defaults).
+if [ -f .env ]; then set -a; . ./.env; set +a; fi
+
 LOG_DIR=logs
 mkdir -p "$LOG_DIR" data
 

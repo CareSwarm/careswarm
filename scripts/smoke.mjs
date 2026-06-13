@@ -17,7 +17,7 @@ import {
   SMOLVLA_LIBERO_VISION_Q8,
 } from '@qvac/sdk';
 
-const MODELS_DIR = process.env.QVAC_MODELS_DIR ?? './models';
+const MODELS_DIR = path.resolve(process.env.QVAC_MODELS_DIR ?? './models');
 const MEDPSY_1_7B = path.join(MODELS_DIR, 'medpsy-1.7b-q4_k_m-imat.gguf');
 const MEDPSY_4B = path.join(MODELS_DIR, 'medpsy-4b-q4_k_m-imat.gguf');
 
@@ -309,20 +309,27 @@ await section('vla', async () => {
     modelType: 'vla',
     onProgress: logProgress('smolvla'),
   });
-  const hp = await vlaHparams({ modelId });
-  console.log('   vla hparams:', JSON.stringify(hp).slice(0, 300));
-  const size = VLA_DEFAULT_IMAGE_SIZE ?? 256;
-  const fakeImg = new Float32Array(3 * size * size).fill(0.5);
-  const stateDim = hp?.stateDim ?? hp?.state_dim ?? 8;
-  const fakeState = new Float32Array(stateDim).fill(0);
+  const res = await vlaHparams({ modelId });
+  const hp = res.hparams ?? res;
+  console.log('   vla hparams:', JSON.stringify(hp).slice(0, 200));
+  const size = hp.visionImageSize ?? VLA_DEFAULT_IMAGE_SIZE ?? 512;
+  // Dummy inputs just to exercise the real vla() signature end-to-end
+  const frame = new Float32Array(3 * size * size).fill(0);
+  const state = new Float32Array(hp.maxStateDim).fill(0);
+  const tokens = new Int32Array(hp.tokenizerMaxLength).fill(0);
+  const mask = new Uint8Array(hp.tokenizerMaxLength).fill(0);
+  mask[0] = 1;
   const out = await vla({
     modelId,
-    images: [fakeImg, fakeImg],
-    state: fakeState,
-    instruction: 'pick up the medicine box',
+    images: [frame, frame],
+    imgWidth: size,
+    imgHeight: size,
+    state,
+    tokens,
+    mask,
   });
-  console.log('   vla result keys:', Object.keys(out ?? {}));
-  console.log('   actions preview:', JSON.stringify(out?.actions ?? out)?.slice(0, 200));
+  console.log(`   actionDim=${out.actionDim} chunkSize=${out.chunkSize} actions=${out.actions?.length}`);
+  if (!out.actions?.length) throw new Error('VLA returned no actions');
   await unloadModel({ modelId });
 });
 
