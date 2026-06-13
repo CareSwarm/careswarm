@@ -114,6 +114,8 @@ No `openai`, `anthropic`, or any cloud AI dependency exists in this repo: `grep 
 
 Agents sit behind an HTTP **402 Payment Required** paywall (`X-Payment-*` headers). The auto-paying client settles on a local SQLite USDT ledger — synchronous, offline, tamper-evident (each receipt is `sha256(prev_hash + row)`). Optional: `POST /api/settle` nets balances into one transaction on **Plasma testnet** (chain 9746) — off by default, demo runs fully offline.
 
+Live proof of the settlement path on Tether's Plasma testnet (the tx calldata anchors the receipt-chain head + a balance digest): [`0x7a07…0afb0`](https://testnet.plasmascan.to/tx/0x7a07094778177363dda884995a626cba40f1be1cbeecd9b828ac45a3dc00afb0) — block 25525135, 26,560 gas.
+
 ## Safety
 
 CareSwarm is a hackathon demo, **not a medical device**. A deterministic emergency pre-check runs before any model; every final note ends with a disclaimer; the system is framed as a guideline navigator, never a diagnosis. Prompts are logged in full *by design* (auditability requirement) — don't enter real personal data.
