@@ -1,0 +1,18 @@
+# deps
+node_modules/
+# runtime data (rag.db, ledger.db, provider session)
+data/
+# runtime logs — sample-run.jsonl is force-added as a submission artifact
+logs/*.jsonl
+!logs/sample-run.jsonl
+# env
+.env
+# next.js
+apps/dashboard/.next/
+apps/dashboard/out/
+# os
+.DS_Store
+# GGUF models + QVAC cache never live in the repo
+*.gguf
+/models/
+/.qvac-cache/

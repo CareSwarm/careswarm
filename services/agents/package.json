@@ -1,0 +1,14 @@
+{
+  "name": "@careswarm/agents",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "description": "Seven specialist agents (triage, librarian, clinician, scribe, translator, robot-pilot, voice) behind an HTTP 402 paywall.",
+  "dependencies": {
+    "@careswarm/engine": "*",
+    "@careswarm/payments": "*",
+    "express": "^4.21.0",
+    "zod": "^3.24.0"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$comment": "Every remote API this project can touch, per the hackathon transparency rule. The demo itself runs fully offline after setup — no cloud AI APIs anywhere.",
+  "remoteApis": [
+    {
+      "url": "https://huggingface.co/qvac/MedPsy-1.7B-GGUF | https://huggingface.co/qvac/MedPsy-4B-GGUF",
+      "purpose": "One-time download of the MedPsy GGUF weights (scripts/download-models.sh)",
+      "phase": "setup-only",
+      "dataSent": "nothing beyond the HTTP download request"
+    },
+    {
+      "url": "registry.npmjs.org",
+      "purpose": "npm install of dependencies (including @qvac/sdk)",
+      "phase": "setup-only",
+      "dataSent": "standard npm package requests"
+    },
+    {
+      "url": "QVAC model registry (registry://hf/... via Hyperswarm/Hyperdrive)",
+      "purpose": "First loadModel() of built-in models (Qwen3-1.7B, EmbeddingGemma, SmolVLA) downloads weights through QVAC's own distributed registry into the local cache",
+      "phase": "setup-only (first run), cached afterwards",
+      "dataSent": "blob requests on the P2P registry; no user data"
+    },
+    {
+      "url": "Hyperswarm DHT bootstrap nodes",
+      "purpose": "P2P delegated inference between our own provider and consumer processes (both run on this machine; disclosed honestly — see README P2P section)",
+      "phase": "runtime, only when the optional provider is running",
+      "dataSent": "DHT routing + the delegated inference payloads between our two processes"
+    },
+    {
+      "url": "https://testnet-rpc.plasma.to (chain id 9746)",
+      "purpose": "OPTIONAL settlement of netted session balances on Tether's Plasma testnet. Off by default (PLASMA_MODE=off); the demo and all payments work fully offline on the local ledger",
+      "phase": "runtime, opt-in only",
+      "dataSent": "a settlement transaction (aggregate amounts, no prompts or health data)"
+    }
+  ],
+  "cloudAiApis": "none — all inference, embeddings, RAG, and (optional) VLA run on-device through the QVAC SDK"
+}

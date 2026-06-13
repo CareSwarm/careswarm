@@ -1,0 +1,30 @@
+{
+  "name": "careswarm",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "description": "A local-first AI agent economy with a private-healthcare flagship, powered entirely by the QVAC SDK on an 8GB laptop.",
+  "engines": {
+    "node": ">=22.17"
+  },
+  "workspaces": [
+    "packages/*",
+    "services/*"
+  ],
+  "scripts": {
+    "download-models": "bash scripts/download-models.sh",
+    "smoke": "node scripts/smoke.mjs",
+    "ingest": "npx tsx scripts/ingest-corpus.ts",
+    "orchestrator": "npx tsx services/orchestrator/src/orchestrator.ts",
+    "agents": "npx tsx services/agents/src/index.ts",
+    "provider": "npx tsx services/provider/src/provider.ts",
+    "demo": "bash scripts/demo.sh"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

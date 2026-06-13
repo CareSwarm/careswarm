@@ -1,0 +1,16 @@
+{
+  "name": "@careswarm/payments",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "description": "HTTP 402 micropayments between agents: X-Payment headers, Express paywall middleware, auto-paying client, and a tamper-evident local USDT ledger (optional Plasma testnet settlement).",
+  "main": "src/index.ts",
+  "dependencies": {
+    "better-sqlite3": "^11.7.0",
+    "ethers": "^6.13.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12"
+  }
+}
