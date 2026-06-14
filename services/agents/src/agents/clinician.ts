@@ -1,25 +1,30 @@
-// Deep clinical reasoning on MedPsy-4B (thinking model). Can call the
-// search_guidelines tool mid-reasoning, which hires the librarian over a
-// paid A2A call. Max 2 tool rounds, then it must answer. Runs delegated
-// (P2P) when a provider session exists — see services/provider.
+// Clinical reasoning. Can call the search_guidelines tool mid-reasoning, which
+// hires the librarian over a paid A2A call (max 2 rounds, then it answers).
+//
+// Model: MedPsy-1.7B by default so the whole swarm fits an 8GB laptop without
+// swap thrash. When a P2P provider session exists the heavier MedPsy-4B runs
+// delegated on that box instead (set CLINICIAN_MODEL=medpsy_4b to force 4B
+// locally on a roomier machine).
 
 import { z } from 'zod';
 import fs from 'node:fs';
 import path from 'node:path';
 import { complete } from '@careswarm/engine';
-import type { ChatMessage, ToolDef } from '@careswarm/engine';
+import type { ChatMessage, ToolDef, ModelKey } from '@careswarm/engine';
 import { hireAgent } from '../a2a-client.ts';
 import type { AgentDescriptor, AgentHandler, JobRequest, JobResult } from '../types.ts';
+
+const LOCAL_MODEL = (process.env.CLINICIAN_MODEL as ModelKey) ?? 'medpsy_1_7b';
 
 export const manifest: AgentDescriptor = {
   id: 'clinician',
   name: 'Clinician',
-  description: 'Deep clinical reasoning with visible thinking (MedPsy-4B-Thinking). Hires the Guideline Librarian mid-inference when it needs sources (paid A2A tool call). Supports P2P-delegated inference.',
+  description: 'Clinical reasoning over the triage + guideline context. Hires the Guideline Librarian mid-inference when it needs sources (paid A2A tool call). Runs MedPsy-1.7B locally on 8GB, or MedPsy-4B when delegated to a P2P provider.',
   category: 'health',
   version: '1.0.0',
   price: 100_000, // 0.10 USDT
   capabilities: ['clinical-reasoning', 'differential-diagnosis', 'tool-calling', 'a2a-hiring', 'p2p-delegation'],
-  modelKey: 'medpsy_4b',
+  modelKey: 'medpsy_1_7b',
 };
 
 const SYSTEM = `You are a careful clinician assistant analyzing a case on a privacy-preserving local device.
@@ -72,6 +77,8 @@ export const handler: AgentHandler = async (job: JobRequest): Promise<JobResult>
   ];
 
   const delegate = delegateOptions();
+  // Delegated → the provider hosts 4B; local → light 1.7B so 8GB stays smooth.
+  const modelKey: ModelKey = delegate ? 'medpsy_4b' : LOCAL_MODEL;
   const toolCallsMade: Array<{ query: string; receipt?: string }> = [];
   let thinkingText = '';
   let finalText = '';
@@ -80,7 +87,7 @@ export const handler: AgentHandler = async (job: JobRequest): Promise<JobResult>
   try {
     for (let round = 0; round < 3; round++) {
       const res = await complete({
-        modelKey: 'medpsy_4b',
+        modelKey,
         system: SYSTEM,
         history,
         tools: [searchTool],

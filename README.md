@@ -57,16 +57,30 @@ curl -X POST localhost:4000/api/orchestrate -H 'Content-Type: application/json' 
   -d '{"prompt":"I have had a mild headache for two days. What should I do?"}'
 ```
 
-### P2P delegated inference (second device on the LAN)
+### P2P delegated inference (offload the heavy model to another box)
+
+The clinician (MedPsy-4B) is the only model that strains an 8GB laptop. It can
+run on a provider elsewhere — a desktop, a second laptop, or a VPS — reached
+over the Hyperswarm DHT and paid per session. Setup for a remote provider is in
+[`deploy/`](deploy/README.md).
 
 ```bash
-# on the provider device:
-npm run provider                  # exposes MedPsy-4B on the DHT, prints its public key
-# on the consumer device:
-node scripts/buy-session.mjs     # pays 402 for a session → clinician now runs delegated
+# on the provider box (see deploy/README.md): hosts MedPsy-4B, prints its DHT key
+# on this laptop:
+node scripts/connect-provider.mjs <PROVIDER_PUBKEY>   # pays the session, points the clinician at it
 ```
 
-Honest engineering note: we tried running provider + consumer on one machine first. Hyperswarm holepunching cannot connect a peer to itself behind a router without hairpin NAT (`PEER_CONNECTION_FAILED`), and two copies of MedPsy-4B don't fit in 8GB of unified memory anyway — so this genuinely needs two devices, which is rather the point of P2P load distribution. `fallbackToLocal: true` keeps every workflow alive when the provider is unreachable: kill the provider mid-run and the clinician finishes locally.
+`fallbackToLocal: true` keeps every workflow alive when the provider is
+unreachable: the clinician finishes locally. By default the demo runs the
+clinician locally (with the planner model freed after planning so 4B fits).
+
+Honest notes on what we hit: provider + consumer on **one** machine can't
+holepunch to themselves without hairpin NAT (`PEER_CONNECTION_FAILED`), and two
+copies of 4B don't fit in 8GB anyway — so this genuinely wants a second box,
+which is the point of P2P load distribution. On a remote **ARM64** VPS the
+QVAC native inference worker segfaulted (a prebuilt-on-aarch64 issue, tracked);
+the session-payment + delegation wiring is in place and `fallbackToLocal`
+covers the gap, so the shipped demo runs the clinician on-device.
 
 ## Hardware
 

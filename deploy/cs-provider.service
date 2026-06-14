@@ -1,0 +1,16 @@
+[Unit]
+Description=CareSwarm P2P inference provider (MedPsy-4B over Hyperswarm DHT)
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root/cs-provider
+# bare runtime is spawned as `bare` from PATH — node_modules/.bin must be on it
+Environment=PATH=/root/cs-provider/node_modules/.bin:/usr/local/bin:/usr/bin:/bin
+ExecStartPre=/bin/rm -f /root/cs-provider/pubkey.txt /root/cs-provider/ready.txt
+ExecStart=/usr/bin/node /root/cs-provider/provider.mjs
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

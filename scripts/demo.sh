@@ -22,9 +22,9 @@ fi
 
 echo "🐝 Starting CareSwarm (8GB RAM choreography)…"
 
-# 4.0GB lets MedPsy-4B (3.4) + embeddings (0.5) coexist → no reload between
-# clinician tool-call rounds. Still leaves headroom for the OS on 8GB.
-QVAC_RAM_BUDGET_GB=4.0 CARESWARM_PROCESS=agents \
+# 2.5GB fits MedPsy-1.7B (1.5) + embeddings (0.5) with headroom — the whole
+# swarm stays light on an 8GB machine. (Delegated 4B runs on the provider.)
+QVAC_RAM_BUDGET_GB=2.5 CARESWARM_PROCESS=agents \
   npx tsx services/agents/src/index.ts >> "$LOG_DIR/agents.log" 2>&1 &
 AGENTS_PID=$!
 

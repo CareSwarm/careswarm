@@ -199,6 +199,13 @@ export function managerState() {
   };
 }
 
+/** Unload one model now if it's idle. Lets the orchestrator free its planner
+ *  model the moment planning is done, so the agents process has RAM for 4B. */
+export async function forceUnload(key: ModelKey): Promise<void> {
+  const e = entries.get(key);
+  if (e && e.refCount === 0) await evict(key, 'manual');
+}
+
 /** Unload everything (graceful shutdown). */
 export async function shutdownModels(): Promise<void> {
   if (sweeper) clearInterval(sweeper);

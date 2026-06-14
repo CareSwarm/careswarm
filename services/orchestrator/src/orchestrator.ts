@@ -15,6 +15,7 @@ import {
   readAuditLog,
   onEngineEvent,
   shutdownModels,
+  forceUnload,
 } from '@careswarm/engine';
 import { balances, listTransfers, verifyChain, formatUSDT, settleOnPlasma } from '@careswarm/payments';
 
@@ -86,6 +87,10 @@ app.post('/api/orchestrate', async (req, res) => {
   try {
     state.updateStatus(request.id, 'parsing');
     const plan = await parser.parse(prompt, { jobId: request.id });
+
+    // Planning is done — free the planner model so the agents process has the
+    // full RAM budget for MedPsy-4B during the workflow (8GB machine).
+    await forceUnload('orchestrator');
 
     state.updateStatus(request.id, 'routing', { intent: plan });
     const workflow = await engine.createWorkflow(plan, prompt, callerAccount);
