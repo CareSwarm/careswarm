@@ -38,7 +38,7 @@ A swarm of specialist medical agents plans, reasons, retrieves guidelines, and a
 Requirements: Node ≥ 22.17, ~8GB free disk for models, macOS/Linux.
 
 ```bash
-git clone https://github.com/agentsynth/careswarm && cd careswarm
+git clone https://github.com/CareSwarm/careswarm && cd careswarm
 npm install                  # workspace deps (@qvac/sdk etc.)
 npm run download-models      # MedPsy GGUFs from HuggingFace (~3.7GB, resumable)
 npm run ingest               # index the medical corpus (QVAC embeddings + RAG)
