@@ -8,14 +8,15 @@ Record on the M1 Air with Activity Monitor (Memory tab) visible in a corner — 
 - Terminal: `grep -ri "openai\|anthropic" package.json packages services` → nothing. "Zero cloud AI."
 
 ## 0:30–2:30 — Flagship workflow (the core)
-- Browser at localhost:3000. Type the Vietnamese prompt:
-  > Bố tôi 62 tuổi, bị tức ngực khi leo cầu thang mấy tuần nay, nghỉ thì đỡ. Nên làm gì? Trả lời bằng tiếng Việt.
+- Browser at localhost:3000. Type the prompt:
+  > My father is 62 and gets chest tightness when he climbs stairs; it eases when he rests. What should we do?
 - Narrate as the right-hand **live feed** lights up:
   - orchestrator (Qwen3-1.7B) emits the plan → step cards appear: triage → librarian → clinician → scribe → translator.
   - Each step shows a **💸 payment receipt** (0.02 / 0.01 / 0.10 …) — point at it: "that's a real 402 micropayment on the local USDT ledger."
   - Watch **model load/unload** events in the feed: "8GB can't hold every model, so the ModelManager evicts LRU and reloads — this churn is the feature."
-- Open the **clinician thinking** accordion: MedPsy-4B reasoning visible. Point at the `search_guidelines` line: "the clinician hired the librarian *mid-reasoning* over a paid agent-to-agent call."
-- Final Vietnamese care note appears with the safety disclaimer.
+- Open the **clinician thinking** accordion: the reasoning is visible. Point at the `search_guidelines` line: "the clinician hired the librarian *mid-reasoning* over a paid agent-to-agent call."
+- Final care note appears with the safety disclaimer.
+- Multilingual beat (~15s): rerun with a Spanish prompt ("Mi padre tiene dolor en el pecho al subir escaleras…") — the translator agent renders the note in Spanish. "Ask in any language, it answers in yours."
 
 ## 2:30–3:15 — Metrics + audit
 - `/metrics` page: TTFT and tok/s charts. "Every inference is logged."

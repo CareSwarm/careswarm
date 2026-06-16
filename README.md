@@ -7,8 +7,8 @@ Built for [QVAC Hackathon I – Unleash Edge AI](https://dorahacks.io/hackathon/
 A swarm of specialist medical agents plans, reasons, retrieves guidelines, and answers in your language — with **zero cloud AI**. Every piece of inference, embedding, and RAG runs on-device through the [QVAC SDK](https://qvac.tether.io/dev/sdk/). Every agent job is a **USDT micropayment** over HTTP 402. Heavy inference can be **delegated P2P** over the Hyperswarm DHT — and paid for. Health data never leaves the machine.
 
 ```
-你 / Bạn / You
-   │  "Bố tôi 62 tuổi, bị tức ngực khi leo cầu thang…"
+You  (ask in any language — it answers in yours)
+   │  "My father, 62, gets chest pain when he climbs stairs…"
    ▼
 ┌──────────────────────────── this laptop (8GB M1 Air) ───────────────────────────┐
 │  orchestrator :4000          agents :3001 (each behind a 402 paywall)           │
@@ -48,7 +48,11 @@ cd apps/dashboard && npm install && npm run build && cd ../..
 
 Open **http://localhost:3000**, try:
 
-> Bố tôi 62 tuổi, bị tức ngực khi leo cầu thang mấy tuần nay, nghỉ thì đỡ. Nên làm gì? Trả lời bằng tiếng Việt.
+> My father is 62 and gets chest tightness when he climbs stairs; it eases when he rests. What should we do?
+
+Multilingual is built in — ask in another language (or add "answer in Spanish/Vietnamese/…") and the translator agent renders the final note in that language:
+
+> Mi padre tiene dolor en el pecho al subir escaleras. ¿Qué deberíamos hacer?
 
 Or headless:
 

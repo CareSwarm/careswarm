@@ -30,9 +30,10 @@ const AGENT_EMOJI: Record<string, string> = {
 };
 
 const EXAMPLES = [
-  'Bố tôi 62 tuổi, bị tức ngực khi leo cầu thang, nghỉ thì đỡ. Nên làm gì? Trả lời bằng tiếng Việt.',
+  'My father is 62 and gets chest tightness when he climbs stairs; it eases with rest. What should we do?',
   'My 8-month-old has a 38.6°C fever since this morning. What should I watch for?',
   'I have had a mild headache for two days after long screen hours.',
+  'Mi padre tiene dolor en el pecho al subir escaleras. ¿Qué hacemos?',
   'Robot, fetch the medicine box from the table.',
 ];
 
@@ -158,7 +159,7 @@ export default function Chat({ live }: { live: LiveState }) {
         <textarea
           className="w-full bg-transparent outline-none resize-none text-sm placeholder-[var(--muted)]"
           rows={3}
-          placeholder="Describe symptoms or give the swarm a task… (Tiếng Việt OK)"
+          placeholder="Describe symptoms or give the swarm a task… (any language)"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) send(); }}

@@ -27,5 +27,5 @@ Software:
       User Name: nguyen son (nguyenson)
       Secure Virtual Memory: Enabled
       System Integrity Protection: Enabled
-      Time since boot: 14 ngày, 23 giờ, 43 phút
+      Time since boot: 17 ngày, 23 giờ, 33 phút
 
