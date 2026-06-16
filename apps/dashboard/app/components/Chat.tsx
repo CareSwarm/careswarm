@@ -85,13 +85,33 @@ function RobotTrajectory({ robot }: { robot: any }) {
   );
 }
 
-export default function Chat({ live }: { live: LiveState }) {
+export default function Chat({
+  live,
+  replayResult,
+  onReplay,
+  replaying,
+}: {
+  live: LiveState;
+  replayResult?: any;
+  onReplay?: () => void;
+  replaying?: boolean;
+}) {
+  const isReplay = typeof onReplay === 'function';
   const [prompt, setPrompt] = useState('');
   const [busy, setBusy] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [localResult, setLocalResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [emergency, setEmergency] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // In replay mode the result comes from the recording, not a POST.
+  const result = isReplay ? replayResult : localResult;
+  const effectiveBusy = isReplay ? Boolean(replaying) : busy;
+
+  // Prefill the recorded prompt in replay mode.
+  useEffect(() => {
+    if (isReplay && replayResult?.workflow?.prompt) setPrompt(replayResult.workflow.prompt);
+  }, [isReplay, replayResult]);
 
   // Build the live view of the most recent workflow from SSE events
   const workflow = useMemo<WorkflowView | null>(() => {
@@ -122,9 +142,14 @@ export default function Chat({ live }: { live: LiveState }) {
   }, [workflow, result]);
 
   async function send() {
+    // Replay mode: re-run the recording instead of hitting a backend.
+    if (isReplay) {
+      onReplay!();
+      return;
+    }
     if (!prompt.trim() || busy) return;
     setBusy(true);
-    setResult(null);
+    setLocalResult(null);
     setError(null);
     setEmergency(null);
     try {
@@ -135,7 +160,7 @@ export default function Chat({ live }: { live: LiveState }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? `HTTP ${res.status}`);
-      setResult(data);
+      setLocalResult(data);
       if (data.plan?.emergencyBanner) setEmergency(data.plan.emergencyBanner);
     } catch (err: any) {
       setError(err.message);
@@ -175,10 +200,12 @@ export default function Chat({ live }: { live: LiveState }) {
           </div>
           <button
             onClick={send}
-            disabled={busy || !prompt.trim()}
+            disabled={effectiveBusy || (!isReplay && !prompt.trim())}
             className="ml-auto px-4 py-1.5 rounded bg-[var(--accent)] text-black text-sm font-bold disabled:opacity-40"
           >
-            {busy ? 'swarm working…' : 'Send ⌘↵'}
+            {isReplay
+              ? (effectiveBusy ? 'replaying…' : '▶ Replay recorded run')
+              : (effectiveBusy ? 'swarm working…' : 'Send ⌘↵')}
           </button>
         </div>
       </div>
@@ -190,7 +217,7 @@ export default function Chat({ live }: { live: LiveState }) {
       )}
 
       <div ref={scrollRef} className="flex flex-col gap-2 max-h-[420px] overflow-y-auto scrollbar-thin">
-        {workflow && (busy || result) && (
+        {workflow && (effectiveBusy || result) && (
           <>
             <div className="text-xs text-[var(--muted)]">
               plan via <span className="text-[var(--accent2)]">{workflow.parser}</span> · {workflow.summary}

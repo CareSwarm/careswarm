@@ -3,6 +3,10 @@
 // Ledger balances, receipt chain, optional Plasma settlement.
 
 import { useEffect, useState } from 'react';
+import { REPLAY } from '../lib/replay';
+
+// The verified settlement tx (chain 9746) — shown in replay mode.
+const PLASMA_TX = '0x7a07094778177363dda884995a626cba40f1be1cbeecd9b828ac45a3dc00afb0';
 
 interface Ledger {
   balances: Array<{ id: string; balance: number; display: string }>;
@@ -19,13 +23,20 @@ export default function EconomyPage() {
   const [settleResult, setSettleResult] = useState<string | null>(null);
 
   useEffect(() => {
-    const load = () => fetch('/api/ledger').then((r) => r.json()).then(setLedger).catch(() => {});
+    const url = REPLAY ? '/replay/ledger.json' : '/api/ledger';
+    const load = () => fetch(url).then((r) => r.json()).then(setLedger).catch(() => {});
     load();
+    if (REPLAY) return; // static in replay
     const t = setInterval(load, 4000);
     return () => clearInterval(t);
   }, []);
 
   async function settleOnPlasma() {
+    // Replay mode: the settlement already happened — link to the real tx.
+    if (REPLAY) {
+      window.open(`https://testnet.plasmascan.to/tx/${PLASMA_TX}`, '_blank');
+      return;
+    }
     setSettling(true);
     setSettleResult(null);
     try {
@@ -56,7 +67,7 @@ export default function EconomyPage() {
           className="ml-auto text-xs px-3 py-1.5 rounded border border-[var(--accent2)] text-[var(--accent2)] hover:bg-[var(--accent2)]/10 disabled:opacity-40"
           title="Optional: net session balances on Tether's Plasma testnet (disclosed remote API)"
         >
-          {settling ? 'settling…' : '⛓️ Settle on Plasma testnet'}
+          {REPLAY ? '⛓️ View Plasma settlement tx ↗' : settling ? 'settling…' : '⛓️ Settle on Plasma testnet'}
         </button>
       </div>
 

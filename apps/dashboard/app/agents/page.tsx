@@ -3,6 +3,7 @@
 // Agent marketplace + live ModelManager state.
 
 import { useEffect, useState } from 'react';
+import { REPLAY } from '../lib/replay';
 
 interface Manifest {
   id: string;
@@ -24,7 +25,8 @@ export default function AgentsPage() {
   const [models, setModels] = useState<any>(null);
 
   useEffect(() => {
-    fetch('/api/agents').then((r) => r.json()).then(setAgents).catch(() => {});
+    fetch(REPLAY ? '/replay/agents.json' : '/api/agents').then((r) => r.json()).then(setAgents).catch(() => {});
+    if (REPLAY) return; // no live ModelManager in replay
     const t = setInterval(() => {
       fetch('/api/models').then((r) => r.json()).then(setModels).catch(() => {});
     }, 3000);

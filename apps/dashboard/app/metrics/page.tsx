@@ -7,6 +7,7 @@ import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
   BarChart, Bar, Legend, CartesianGrid,
 } from 'recharts';
+import { REPLAY } from '../lib/replay';
 
 interface InferenceRow {
   ts: string;
@@ -25,8 +26,10 @@ export default function MetricsPage() {
   const [data, setData] = useState<{ aggregate: any; recent: any[] } | null>(null);
 
   useEffect(() => {
-    const load = () => fetch('/api/metrics').then((r) => r.json()).then(setData).catch(() => {});
+    const url = REPLAY ? '/replay/metrics.json' : '/api/metrics';
+    const load = () => fetch(url).then((r) => r.json()).then(setData).catch(() => {});
     load();
+    if (REPLAY) return; // static in replay
     const t = setInterval(load, 5000);
     return () => clearInterval(t);
   }, []);
