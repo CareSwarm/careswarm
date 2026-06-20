@@ -2,6 +2,10 @@
   <img src="brand/careswarm-logo-1200.png" alt="CareSwarm" width="440" />
 </p>
 
+<p align="center">
+  <a href="https://careswarm-agents.vercel.app"><b>▶ Live demo — replay dashboard</b></a>
+</p>
+
 **A local-first AI agent economy with a private-healthcare flagship — running entirely on one 8GB MacBook Air.**
 
 Built for [QVAC Hackathon I – Unleash Edge AI](https://dorahacks.io/hackathon/qvac-unleach-edge-ai-i/detail). Tracks: **General Purpose** + **Psy Models**.
