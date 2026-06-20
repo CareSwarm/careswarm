@@ -16,3 +16,8 @@ apps/dashboard/out/
 *.gguf
 /models/
 /.qvac-cache/
+.vercel
+# personal Vietnamese recording script — not for the public repo
+VIDEO-SCRIPT-VI.md
+# local Claude Code tooling (launch configs, plans)
+.claude/

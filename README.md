@@ -1,4 +1,6 @@
-# 🐝 CareSwarm
+<p align="center">
+  <img src="brand/careswarm-logo-1200.png" alt="CareSwarm" width="440" />
+</p>
 
 **A local-first AI agent economy with a private-healthcare flagship — running entirely on one 8GB MacBook Air.**
 
