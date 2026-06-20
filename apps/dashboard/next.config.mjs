@@ -11,6 +11,23 @@ const nextConfig = {
   // This app is self-contained — trace from here, not the monorepo root
   // (silences the multi-lockfile warning and keeps the build standalone).
   outputFileTracingRoot: here,
+  // The repo root has QVAC's bare-runtime deps (bare-fs/os/stdio…). Built from
+  // here, webpack resolves React's `process` import to bare-stdio's polyfill and
+  // drags its native `.addon()` binding loaders into the client bundle — which
+  // throws in the browser and kills hydration. The client only needs
+  // process.env.NODE_ENV (Next inlines it), so keep process + bare-* out.
+  webpack(config, { isServer }) {
+    if (!isServer) {
+      config.resolve.alias = { ...config.resolve.alias, process: false };
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        'bare-fs': false, 'bare-os': false, 'bare-stdio': false,
+        'bare-tty': false, 'bare-signals': false, 'bare-url': false,
+        'bare-events': false, 'bare-path': false,
+      };
+    }
+    return config;
+  },
   // In replay mode there's no orchestrator — the dashboard reads /replay/*.json,
   // so skip the proxy entirely (it would point at an unreachable localhost).
   async rewrites() {

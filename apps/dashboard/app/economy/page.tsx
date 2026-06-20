@@ -52,6 +52,18 @@ export default function EconomyPage() {
 
   if (!ledger) return <div className="text-[var(--muted)] text-sm">loading ledger…</div>;
 
+  // Net each account's position from the receipt flow — the netted total (sum of
+  // the credits) is what actually moves on-chain when the session settles, vs. the
+  // dozens of tiny off-chain micropayments.
+  const net: Record<string, number> = {};
+  for (const t of ledger.transfers) {
+    net[t.from_id] = (net[t.from_id] ?? 0) - t.amount;
+    net[t.to_id] = (net[t.to_id] ?? 0) + t.amount;
+  }
+  const nettedUSDT = (
+    Object.values(net).reduce((s, v) => s + (v > 0 ? v : 0), 0) / 1e6
+  ).toFixed(2);
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-3">
@@ -73,6 +85,27 @@ export default function EconomyPage() {
 
       {settleResult && <div className="panel p-3 text-xs">{settleResult}</div>}
 
+      {REPLAY && (
+        <div className="panel p-3 text-xs border-[var(--accent2)]/40 flex flex-wrap items-center gap-2">
+          <span className="text-[var(--accent2)] font-bold">⛓️ Plasma settlement</span>
+          <span className="text-[var(--accent)] font-bold whitespace-nowrap">
+            {ledger.chain.checked} receipts → {nettedUSDT} USDT netted → 1 tx
+          </span>
+          <span className="text-[var(--muted)]">
+            Receipts stay off-chain on the local ledger; the whole session is netted and committed
+            on-chain (merkle root of the receipt log) in one transaction on Plasma testnet:
+          </span>
+          <a
+            href={`https://testnet.plasmascan.to/tx/${PLASMA_TX}`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-[var(--accent2)] hover:underline ml-auto whitespace-nowrap font-mono"
+          >
+            {PLASMA_TX.slice(0, 14)}…{PLASMA_TX.slice(-6)} ↗
+          </a>
+        </div>
+      )}
+
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {ledger.balances.map((b) => (
           <div key={b.id} className="panel px-4 py-3">
@@ -83,7 +116,9 @@ export default function EconomyPage() {
       </div>
 
       <div className="panel p-4 overflow-x-auto">
-        <div className="text-xs text-[var(--muted)] mb-2">Receipt chain (latest first)</div>
+        <div className="text-xs text-[var(--muted)] mb-2">
+          Receipt chain (latest first) — off-chain micropayments; ⛓️ links open the one on-chain settlement they were netted into.
+        </div>
         <table className="text-xs w-full">
           <thead className="text-[var(--muted)] text-left">
             <tr>
@@ -100,7 +135,16 @@ export default function EconomyPage() {
                 <td className="pr-4">{(t.amount / 1e6).toFixed(2)} USDT</td>
                 <td className="pr-4 text-[var(--muted)] max-w-48 truncate">{t.memo}</td>
                 <td className="pr-4 text-[var(--muted)]">{t.hash.slice(0, 10)}…</td>
-                <td>{t.plasma_tx ? `⛓️ ${t.plasma_tx.slice(0, 10)}…` : '—'}</td>
+                <td>
+                  {t.plasma_tx ? (
+                    <a href={`https://testnet.plasmascan.to/tx/${t.plasma_tx}`} target="_blank" rel="noreferrer"
+                      className="text-[var(--accent2)] hover:underline">⛓️ {t.plasma_tx.slice(0, 10)}… ↗</a>
+                  ) : REPLAY ? (
+                    <a href={`https://testnet.plasmascan.to/tx/${PLASMA_TX}`} target="_blank" rel="noreferrer"
+                      title="Netted into this session's single on-chain settlement"
+                      className="text-[var(--accent2)]/70 hover:underline whitespace-nowrap">⛓️ view tx ↗</a>
+                  ) : '—'}
+                </td>
               </tr>
             ))}
           </tbody>
