@@ -20,11 +20,11 @@ You  (ask in any language — it answers in yours)
 │       │                      ✍️ scribe      MedPsy-1.7B   0.02 USDT   │ tool    │
 │       ▼                      🌐 translator  MedPsy-1.7B   0.01 USDT   │ call    │
 │  hires agents over           🤖 robot-pilot SmolVLA       0.05 USDT   │ hires   │
-│  HTTP 402 (local                                                      ▼ librarian│
+│  HTTP 402 (local                                                      ▼librarian│
 │  USDT ledger,                provider :3002 (optional, P2P)          (paid A2A) │
 │  sha256 receipt chain)       MedPsy-4B over Hyperswarm DHT,                     │
 │                              sessions sold via 402                              │
-└──────────────────────────────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Why this is interesting
