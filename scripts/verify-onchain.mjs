@@ -12,7 +12,7 @@
 
 import { readFileSync } from 'node:fs';
 
-const TX = '0x7a07094778177363dda884995a626cba40f1be1cbeecd9b828ac45a3dc00afb0';
+const TX = '0x1ad885a50084da0640f292329c00683d91e7ad98286213aa30ba7e6a96e3713c';
 const RPC = 'https://testnet-rpc.plasma.to';
 const LEDGER = new URL('../apps/dashboard/public/replay/ledger.json', import.meta.url);
 

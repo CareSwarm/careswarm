@@ -8,8 +8,8 @@ import { REPLAY } from '../lib/replay';
 // The on-chain anchor tx (Plasma testnet, chain 9746) and the receipt-chain head
 // it notarizes in calldata: `careswarm:<head>:<digest>`. Reproduce/verify with
 // `node scripts/verify-onchain.mjs`. Shown in replay mode.
-const PLASMA_TX = '0x7a07094778177363dda884995a626cba40f1be1cbeecd9b828ac45a3dc00afb0';
-const ANCHORED_HEAD = '9db436aaade4c4199b2174587ea20fe6ccf0fc8bf5d43c0bb9e6bf48617af9fd';
+const PLASMA_TX = '0x1ad885a50084da0640f292329c00683d91e7ad98286213aa30ba7e6a96e3713c';
+const ANCHORED_HEAD = 'a19703273e279a7f994b34ba789a11bae6b21f71481a170ae20444f1165a7b5e';
 
 interface Ledger {
   balances: Array<{ id: string; balance: number; display: string }>;
@@ -110,8 +110,8 @@ export default function EconomyPage() {
       <div className="panel p-4 overflow-x-auto">
         <div className="text-xs text-[var(--muted)] mb-2 leading-relaxed">
           Receipt chain (latest first) — <span className="text-[var(--text)]">off-chain</span> USDT micropayments, sha256-linked
-          (each receipt commits to the previous one, so the chain is tamper-evident). The settled session&apos;s head is
-          <span className="text-[var(--accent2)]"> anchored on-chain</span> above; later receipts are pending the next checkpoint.
+          (each receipt commits to the previous one, so the chain is tamper-evident). The chain head is
+          <span className="text-[var(--accent2)]"> anchored on-chain</span> above, so the whole ledger is provable on Plasma testnet.
         </div>
         <table className="text-xs w-full">
           <thead className="text-[var(--muted)] text-left">

@@ -128,13 +128,13 @@ node scripts/verify-onchain.mjs
 ```
 
 ```
-on-chain tx   : 0x7a07094778177363dda884995a626cba40f1be1cbeecd9b828ac45a3dc00afb0
-calldata      : careswarm:9db436aa…:048a5be1…
-anchored head : 9db436aa…  →  20 receipts to genesis, links intact ✓
+on-chain tx   : 0x1ad885a50084da0640f292329c00683d91e7ad98286213aa30ba7e6a96e3713c
+calldata      : careswarm:a19703273e…:0410b78b…
+anchored head : a19703273e…  →  61 receipts to genesis, links intact ✓
 ✓ VERIFIED — the on-chain head is the tip of an unbroken sha256 receipt chain.
 ```
 
-The tx is public on [Plasmascan](https://testnet.plasmascan.to/tx/0x7a07094778177363dda884995a626cba40f1be1cbeecd9b828ac45a3dc00afb0). Checkpoints are periodic, so newer receipts stay off-chain until the next anchor.
+The tx is public on [Plasmascan](https://testnet.plasmascan.to/tx/0x1ad885a50084da0640f292329c00683d91e7ad98286213aa30ba7e6a96e3713c) — it anchors the head of the whole 61-receipt ledger.
 
 ## QVAC usage map
 
