@@ -51,6 +51,7 @@ export function useReplay() {
   const workflow = useRef<any>(null);
   const cancel = useRef<(() => void) | null>(null);
   const [ready, setReady] = useState(false);
+  const [prompt, setPrompt] = useState('');
 
   useEffect(() => {
     Promise.all([
@@ -59,6 +60,7 @@ export function useReplay() {
     ]).then(([e, w]) => {
       events.current = e?.events ?? [];
       workflow.current = w;
+      setPrompt(w?.workflow?.prompt ?? '');
       setReady(true);
     });
   }, []);
@@ -81,5 +83,5 @@ export function useReplay() {
     return () => cancel.current?.();
   }, [ready, play]);
 
-  return { live, result, play, playing };
+  return { live, result, play, playing, prompt };
 }

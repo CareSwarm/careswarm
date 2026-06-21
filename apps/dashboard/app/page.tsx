@@ -22,10 +22,10 @@ function LiveHome() {
 }
 
 function ReplayHome() {
-  const { live, result, play, playing } = useReplay();
+  const { live, result, play, playing, prompt } = useReplay();
   return (
     <Split
-      chat={<Chat live={live} replayResult={result} onReplay={play} replaying={playing} />}
+      chat={<Chat live={live} replayResult={result} onReplay={play} replaying={playing} recordedPrompt={prompt} />}
       caption="Replay of a real on-device run — the recorded swarm, step by step. The AI itself runs locally via QVAC (see the video)."
       live={live}
     />

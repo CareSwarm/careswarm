@@ -90,11 +90,13 @@ export default function Chat({
   replayResult,
   onReplay,
   replaying,
+  recordedPrompt,
 }: {
   live: LiveState;
   replayResult?: any;
   onReplay?: () => void;
   replaying?: boolean;
+  recordedPrompt?: string;
 }) {
   const isReplay = typeof onReplay === 'function';
   const [prompt, setPrompt] = useState('');
@@ -108,10 +110,11 @@ export default function Chat({
   const result = isReplay ? replayResult : localResult;
   const effectiveBusy = isReplay ? Boolean(replaying) : busy;
 
-  // Prefill the recorded prompt in replay mode.
+  // Replay mode plays one recorded run, so lock the box to its prompt as soon
+  // as it loads (before the run even plays) — no stray example can mismatch it.
   useEffect(() => {
-    if (isReplay && replayResult?.workflow?.prompt) setPrompt(replayResult.workflow.prompt);
-  }, [isReplay, replayResult]);
+    if (isReplay && recordedPrompt) setPrompt(recordedPrompt);
+  }, [isReplay, recordedPrompt]);
 
   // Build the live view of the most recent workflow from SSE events
   const workflow = useMemo<WorkflowView | null>(() => {
@@ -182,22 +185,30 @@ export default function Chat({
     <div className="flex flex-col gap-4">
       <div className="panel p-4">
         <textarea
-          className="w-full bg-transparent outline-none resize-none text-sm placeholder-[var(--muted)]"
+          className="w-full bg-transparent outline-none resize-none text-sm placeholder-[var(--muted)] read-only:cursor-default"
           rows={3}
           placeholder="Describe symptoms or give the swarm a task… (any language)"
           value={prompt}
+          readOnly={isReplay}
+          title={isReplay ? 'Replay mode plays one recorded run. Run it locally to ask your own question.' : undefined}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) send(); }}
         />
         <div className="flex items-center gap-2 mt-2">
-          <div className="flex gap-1 flex-wrap">
-            {EXAMPLES.map((ex, i) => (
-              <button key={i} onClick={() => setPrompt(ex)}
-                className="text-[10px] px-2 py-1 rounded bg-[var(--bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]">
-                {ex.slice(0, 38)}…
-              </button>
-            ))}
-          </div>
+          {isReplay ? (
+            <span className="text-[10px] text-[var(--muted)]">
+              Recorded question — press replay to watch the swarm answer it.
+            </span>
+          ) : (
+            <div className="flex gap-1 flex-wrap">
+              {EXAMPLES.map((ex, i) => (
+                <button key={i} onClick={() => setPrompt(ex)}
+                  className="text-[10px] px-2 py-1 rounded bg-[var(--bg)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)]">
+                  {ex.slice(0, 38)}…
+                </button>
+              ))}
+            </div>
+          )}
           <button
             onClick={send}
             disabled={effectiveBusy || (!isReplay && !prompt.trim())}
