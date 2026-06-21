@@ -2,6 +2,7 @@
 
 import Chat from './components/Chat';
 import LiveFeed from './components/LiveFeed';
+import ExtraPanels from './components/ExtraPanels';
 import { useSSE } from './hooks/useSSE';
 import { useReplay } from './hooks/useReplay';
 import { REPLAY } from './lib/replay';
@@ -32,23 +33,36 @@ const PROOF = [
 // verify everything (real video, open source, on-chain, audit log).
 function ProofBar() {
   return (
-    <div className="panel px-4 py-2.5 mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
-      <span className="text-[var(--muted)]">
-        <span className="text-[var(--accent)] font-medium">QVAC on-device</span> · multi-agent + tool calling ·
-        paid agent-to-agent · MedPsy 1.7B + 4B · on-chain settled · zero cloud AI
-      </span>
-      <div className="ml-auto flex flex-wrap gap-1.5">
-        {PROOF.map((p) => (
-          <a
-            key={p.href}
-            href={p.href}
-            target="_blank"
-            rel="noreferrer"
-            className="px-2.5 py-1 rounded-md border border-[var(--border)] text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)]/40 transition-colors whitespace-nowrap"
-          >
-            {p.label}
-          </a>
-        ))}
+    <div className="panel px-4 py-3 mb-6 flex flex-col gap-2">
+      <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+        <span className="text-sm font-medium text-[var(--text)]">
+          A swarm of medical AI agents on one 8GB laptop — no cloud.
+        </span>
+        <span className="text-xs text-[var(--muted)] font-mono">
+          <span className="text-[var(--accent)]">5</span> models
+          · <span className="text-[var(--accent)]">8GB</span> RAM
+          · <span className="text-[var(--accent)]">0</span> cloud calls
+          · <span className="text-[var(--accent)]">$0</span> API cost
+          · <span className="text-[var(--accent)]">⛓ 1</span> on-chain anchor
+        </span>
+      </div>
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
+        <span className="text-[var(--muted)]">
+          QVAC on-device · multi-agent + tool calling · paid agent-to-agent · MedPsy 1.7B + 4B · settled on Tether’s Plasma
+        </span>
+        <div className="ml-auto flex flex-wrap gap-1.5">
+          {PROOF.map((p) => (
+            <a
+              key={p.href}
+              href={p.href}
+              target="_blank"
+              rel="noreferrer"
+              className="px-2.5 py-1 rounded-md border border-[var(--border)] text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)]/40 transition-colors whitespace-nowrap"
+            >
+              {p.label}
+            </a>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -64,6 +78,7 @@ function ReplayHome() {
         caption="Replay of a real on-device run — the recorded swarm, step by step. The AI itself runs locally via QVAC (see the video)."
         live={live}
       />
+      <ExtraPanels />
     </>
   );
 }

@@ -12,24 +12,18 @@ Built for [QVAC Hackathon I – Unleash Edge AI](https://dorahacks.io/hackathon/
 
 A swarm of specialist medical agents plans, reasons, retrieves guidelines, and answers in your language — with **zero cloud AI**. Every piece of inference, embedding, and RAG runs on-device through the [QVAC SDK](https://qvac.tether.io/dev/sdk/). Every agent job is a **USDT micropayment** over HTTP 402. Heavy inference can be **delegated P2P** over the Hyperswarm DHT — and paid for. Health data never leaves the machine.
 
-```
-You  (ask in any language — it answers in yours)
-   │  "My father, 62, gets chest pain when he climbs stairs…"
-   ▼
-┌──────────────────────────── this laptop (8GB M1 Air) ───────────────────────────┐
-│  orchestrator :4000          agents :3001 (each behind a 402 paywall)           │
-│  Qwen3-1.7B plans the        🩺 triage      MedPsy-1.7B   0.02 USDT             │
-│  workflow (grammar-          📚 librarian   QVAC RAG      0.01 USDT             │
-│  constrained JSON)           🧠 clinician   MedPsy-4B     0.10 USDT ──┐         │
-│       │                      ✍️ scribe      MedPsy-1.7B   0.02 USDT   │ tool    │
-│       ▼                      🌐 translator  MedPsy-1.7B   0.01 USDT   │ call    │
-│  hires agents over           🤖 robot-pilot SmolVLA       0.05 USDT   │ hires   │
-│  HTTP 402 (local                                                      ▼librarian│
-│  USDT ledger,                provider :3002 (optional, P2P)          (paid A2A) │
-│  sha256 receipt chain)       MedPsy-4B over Hyperswarm DHT,                     │
-│                              sessions sold via 402                              │
-└─────────────────────────────────────────────────────────────────────────────────┘
-```
+<p align="center">
+  <img src="brand/architecture.png" alt="CareSwarm architecture: user to orchestrator to paid on-device agents to an on-chain ledger" width="840" />
+</p>
+
+### Why edge AI, not cloud
+
+|  | CareSwarm · on-device | Typical cloud medical AI |
+|---|---|---|
+| **Privacy** | health data never leaves the device | symptoms sent to someone else's servers |
+| **Cost** | $0 per query — runs locally | metered per token, forever |
+| **Offline** | answers with no connection | needs the cloud to respond |
+| **Trust** | every job is a signed receipt, anchored on-chain | opaque, unauditable |
 
 ## Why this is interesting
 

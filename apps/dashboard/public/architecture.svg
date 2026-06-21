@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 500" width="920" height="500" font-family="ui-monospace, 'SF Mono', Menlo, monospace">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1 L8 5 L2 9" fill="none" stroke="#6b7c93" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="920" height="500" rx="12" fill="#0a0e14"/>
+  <rect x="16" y="16" width="888" height="468" rx="14" fill="none" stroke="#34d399" stroke-opacity="0.35" stroke-dasharray="3 5"/>
+  <text x="460" y="40" text-anchor="middle" fill="#34d399" font-size="13" font-weight="bold">one 8GB MacBook Air  ·  QVAC on-device  ·  zero cloud AI</text>
+
+  <!-- user -->
+  <rect x="360" y="56" width="200" height="40" rx="8" fill="#11161f" stroke="#1e2733"/>
+  <text x="460" y="81" text-anchor="middle" fill="#d6e2f0" font-size="12">You — ask in any language</text>
+  <line x1="460" y1="96" x2="460" y2="116" stroke="#6b7c93" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <!-- orchestrator -->
+  <rect x="330" y="118" width="260" height="48" rx="8" fill="#11161f" stroke="#60a5fa" stroke-opacity="0.7"/>
+  <text x="460" y="138" text-anchor="middle" fill="#d6e2f0" font-size="12">Orchestrator · Qwen3-1.7B</text>
+  <text x="460" y="155" text-anchor="middle" fill="#6b7c93" font-size="10">grammar-constrained JSON plan + tool calling</text>
+  <line x1="460" y1="166" x2="460" y2="190" stroke="#6b7c93" stroke-width="1.2" marker-end="url(#arr)"/>
+
+  <!-- paywall -->
+  <text x="460" y="188" text-anchor="middle" fill="#fbbf24" font-size="10">HTTP 402 — every agent job is a USDT micropayment</text>
+  <line x1="40" y1="198" x2="880" y2="198" stroke="#1e2733" stroke-width="1"/>
+
+  <!-- agent row -->
+  <g font-size="11">
+    <!-- triage -->
+    <rect x="30" y="212" width="135" height="70" rx="8" fill="#11161f" stroke="#1e2733"/>
+    <text x="97" y="234" text-anchor="middle" fill="#d6e2f0">triage</text>
+    <text x="97" y="251" text-anchor="middle" fill="#6b7c93" font-size="9">MedPsy-1.7B</text>
+    <text x="97" y="269" text-anchor="middle" fill="#34d399" font-size="10">0.02 USDT</text>
+    <!-- librarian -->
+    <rect x="174" y="212" width="135" height="70" rx="8" fill="#11161f" stroke="#1e2733"/>
+    <text x="241" y="234" text-anchor="middle" fill="#d6e2f0">librarian</text>
+    <text x="241" y="251" text-anchor="middle" fill="#6b7c93" font-size="9">QVAC RAG</text>
+    <text x="241" y="269" text-anchor="middle" fill="#34d399" font-size="10">0.01 USDT</text>
+    <!-- clinician (highlighted) -->
+    <rect x="318" y="212" width="135" height="70" rx="8" fill="#11161f" stroke="#34d399"/>
+    <text x="385" y="234" text-anchor="middle" fill="#d6e2f0">clinician</text>
+    <text x="385" y="251" text-anchor="middle" fill="#6b7c93" font-size="9">MedPsy-4B · thinking</text>
+    <text x="385" y="269" text-anchor="middle" fill="#34d399" font-size="10">0.10 USDT</text>
+    <!-- scribe -->
+    <rect x="462" y="212" width="135" height="70" rx="8" fill="#11161f" stroke="#1e2733"/>
+    <text x="529" y="234" text-anchor="middle" fill="#d6e2f0">scribe</text>
+    <text x="529" y="251" text-anchor="middle" fill="#6b7c93" font-size="9">MedPsy-1.7B</text>
+    <text x="529" y="269" text-anchor="middle" fill="#34d399" font-size="10">0.02 USDT</text>
+    <!-- translator -->
+    <rect x="606" y="212" width="135" height="70" rx="8" fill="#11161f" stroke="#1e2733"/>
+    <text x="673" y="234" text-anchor="middle" fill="#d6e2f0">translator</text>
+    <text x="673" y="251" text-anchor="middle" fill="#6b7c93" font-size="9">MedPsy-1.7B</text>
+    <text x="673" y="269" text-anchor="middle" fill="#34d399" font-size="10">0.01 USDT</text>
+    <!-- robot-pilot -->
+    <rect x="750" y="212" width="135" height="70" rx="8" fill="#11161f" stroke="#1e2733"/>
+    <text x="817" y="234" text-anchor="middle" fill="#d6e2f0">robot-pilot</text>
+    <text x="817" y="251" text-anchor="middle" fill="#6b7c93" font-size="9">SmolVLA</text>
+    <text x="817" y="269" text-anchor="middle" fill="#34d399" font-size="10">0.05 USDT</text>
+  </g>
+
+  <!-- A2A arc clinician -> librarian -->
+  <path d="M360 282 Q300 324 242 290" fill="none" stroke="#34d399" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="300" y="340" text-anchor="middle" fill="#34d399" font-size="10">paid A2A — clinician hires librarian mid-inference</text>
+
+  <!-- P2P note -->
+  <rect x="612" y="300" width="278" height="46" rx="8" fill="#11161f" stroke="#1e2733" stroke-dasharray="3 4"/>
+  <text x="751" y="320" text-anchor="middle" fill="#60a5fa" font-size="11">P2P delegation (Hyperswarm)</text>
+  <text x="751" y="336" text-anchor="middle" fill="#6b7c93" font-size="9">MedPsy-4B runs on a remote provider — weights stay remote</text>
+
+  <line x1="460" y1="282" x2="460" y2="378" stroke="#6b7c93" stroke-width="1.2" stroke-dasharray="2 3" marker-end="url(#arr)"/>
+  <text x="478" y="364" fill="#6b7c93" font-size="9">each job → a receipt</text>
+
+  <!-- ledger / plasma -->
+  <rect x="40" y="384" width="840" height="58" rx="8" fill="#11161f" stroke="#34d399" stroke-opacity="0.5"/>
+  <text x="460" y="408" text-anchor="middle" fill="#d6e2f0" font-size="12">Local USDT ledger · sha256 receipt chain (tamper-evident)</text>
+  <text x="460" y="427" text-anchor="middle" fill="#34d399" font-size="11">→ anchored on-chain · Tether's Plasma testnet · publicly verifiable</text>
+</svg>

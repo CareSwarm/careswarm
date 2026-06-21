@@ -38,6 +38,11 @@ export default function AgentsPage() {
       <h1 className="text-sm text-[var(--muted)]">
         The swarm — each agent is priced per job (HTTP 402) and powered by an on-device QVAC model.
       </h1>
+
+      <div className="panel p-3 sm:p-4">
+        <img src="/architecture.svg" alt="CareSwarm architecture — user → orchestrator → paid agents → on-chain ledger, all on-device" className="w-full" />
+      </div>
+
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {agents.map((a) => (
           <div key={a.id} className="panel p-4 flex flex-col gap-2">
