@@ -216,7 +216,7 @@ export default function Chat({
         </div>
       )}
 
-      <div ref={scrollRef} className="flex flex-col gap-2 max-h-[420px] overflow-y-auto scrollbar-thin">
+      <div ref={scrollRef} className="flex flex-col gap-2">
         {workflow && (effectiveBusy || result) && (
           <>
             <div className="text-xs text-[var(--muted)]">

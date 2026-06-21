@@ -36,11 +36,11 @@ function Split({ chat, caption, live }: { chat: React.ReactNode; caption: string
   return (
     <div className="grid lg:grid-cols-2 gap-6">
       <div>
-        <h1 className="text-sm text-[var(--muted)] mb-3">{caption}</h1>
+        <h1 className="text-sm text-[var(--muted)] mb-3 min-h-[2.75rem] leading-snug">{caption}</h1>
         {chat}
       </div>
       <div>
-        <h2 className="text-sm text-[var(--muted)] mb-3">Live swarm activity</h2>
+        <h2 className="text-sm text-[var(--muted)] mb-3 min-h-[2.75rem] leading-snug">Live swarm activity</h2>
         <LiveFeed live={live} />
       </div>
     </div>

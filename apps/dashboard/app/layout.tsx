@@ -1,18 +1,11 @@
 import './globals.css';
-import Link from 'next/link';
 import type { Metadata } from 'next';
+import NavLinks from './components/NavLinks';
 
 export const metadata: Metadata = {
   title: 'CareSwarm — local-first AI agent economy',
   description: 'A swarm of medical AI agents running entirely on one 8GB laptop, powered by QVAC.',
 };
-
-const NAV = [
-  { href: '/', label: 'Swarm' },
-  { href: '/agents', label: 'Agents' },
-  { href: '/metrics', label: 'Metrics' },
-  { href: '/economy', label: 'Economy' },
-];
 
 const REPLAY = process.env.NEXT_PUBLIC_REPLAY === '1';
 
@@ -26,18 +19,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <a href="https://github.com/CareSwarm/careswarm" className="underline" target="_blank">run it yourself ↗</a>
           </div>
         )}
-        <nav className="border-b border-[var(--border)] px-6 py-3 flex items-center gap-6 sticky top-0 bg-[var(--bg)]/90 backdrop-blur z-10">
-          <img src="/logo.svg" alt="CareSwarm" className="h-7 w-auto" />
-          <span className="text-xs text-[var(--muted)] hidden sm:block">
+        <nav className="border-b border-[var(--border)] px-6 py-3 flex items-center gap-6 sticky top-0 bg-[var(--bg)]/80 backdrop-blur-md z-10">
+          <img src="/logo.svg" alt="CareSwarm" className="h-10 w-auto" />
+          <span className="text-xs text-[var(--muted)] hidden md:block border-l border-[var(--border)] pl-6">
             local-first agent economy · QVAC on-device · no cloud AI
           </span>
-          <div className="ml-auto flex gap-4 text-sm">
-            {NAV.map((n) => (
-              <Link key={n.href} href={n.href} className="text-[var(--muted)] hover:text-[var(--accent)] transition-colors">
-                {n.label}
-              </Link>
-            ))}
-          </div>
+          <NavLinks />
         </nav>
         <main className="p-6 max-w-7xl mx-auto">{children}</main>
       </body>

@@ -58,11 +58,14 @@ function describe(ev: SwarmEvent): string {
   }
 }
 
-function StatCard({ label, value, accent }: { label: string; value: string | number; accent?: boolean }) {
+function StatCard({ label, value, unit }: { label: string; value: string | number; unit?: string }) {
   return (
-    <div className="panel px-4 py-3">
-      <div className="text-xs text-[var(--muted)]">{label}</div>
-      <div className={`text-xl font-bold ${accent ? 'text-[var(--accent)]' : ''}`}>{value}</div>
+    <div className="panel px-4 py-3 transition-colors hover:border-[var(--accent)]/25">
+      <div className="text-[11px] text-[var(--muted)] whitespace-nowrap">{label}</div>
+      <div className="mt-1 text-2xl font-bold leading-none text-[var(--accent)]">
+        {value}
+        {unit && <span className="ml-1 text-sm font-medium text-[var(--muted)]">{unit}</span>}
+      </div>
     </div>
   );
 }
@@ -76,36 +79,36 @@ export default function LiveFeed({ live }: { live: LiveState }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <StatCard label="Inferences" value={live.stats.totalInferences} accent />
+        <StatCard label="Inferences" value={live.stats.totalInferences} />
         <StatCard label="Tokens" value={live.stats.totalTokens.toLocaleString()} />
-        <StatCard label="Payments" value={`${(live.stats.totalPaymentsMicro / 1e6).toFixed(2)} USDT`} accent />
-        <StatCard label="Model load/unload" value={`${live.stats.modelLoads}/${live.stats.modelUnloads}`} />
+        <StatCard label="Payments" value={(live.stats.totalPaymentsMicro / 1e6).toFixed(2)} unit="USDT" />
+        <StatCard label="Loads / unloads" value={`${live.stats.modelLoads}/${live.stats.modelUnloads}`} />
       </div>
 
       <div className="panel flex flex-col h-[520px]">
-        <div className="flex items-center gap-2 px-4 py-2 border-b border-[var(--border)]">
-          <span className={`w-2 h-2 rounded-full ${live.connected ? 'bg-[var(--accent)]' : 'bg-[var(--danger)]'}`} />
-          <span className="text-xs text-[var(--muted)]">live feed</span>
+        <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[var(--border)]">
+          <span className={`w-2 h-2 rounded-full ${live.connected ? 'bg-[var(--accent)] shadow-[0_0_6px_var(--accent)]' : 'bg-[var(--danger)]'}`} />
+          <span className="text-xs font-medium text-[var(--muted)]">live feed</span>
           <div className="ml-auto flex gap-1">
             {FILTERS.map((f) => (
               <button
                 key={f.key}
                 onClick={() => setFilter(f.key)}
-                className={`text-xs px-2 py-0.5 rounded ${filter === f.key ? 'bg-[var(--accent)] text-black' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
+                className={`text-xs px-2.5 py-1 rounded-md transition-colors ${filter === f.key ? 'bg-[var(--accent)]/10 text-[var(--accent)] ring-1 ring-inset ring-[var(--accent)]/30' : 'text-[var(--muted)] hover:text-[var(--text)]'}`}
               >
                 {f.label}
               </button>
             ))}
           </div>
         </div>
-        <div className="flex-1 overflow-y-auto scrollbar-thin px-4 py-2 space-y-1 text-xs">
+        <div className="flex-1 overflow-y-auto scrollbar-thin px-3 py-2 space-y-0.5 text-xs">
           {events.length === 0 && (
             <div className="text-[var(--muted)] pt-8 text-center">
               No events yet — send the swarm a request.
             </div>
           )}
           {events.map((ev) => (
-            <div key={ev.id} className="flex gap-2 items-baseline">
+            <div key={ev.id} className="flex gap-2 items-baseline rounded px-1 py-0.5 transition-colors hover:bg-[var(--text)]/5">
               <span className="text-[var(--muted)] shrink-0">
                 {new Date(ev.timestamp).toLocaleTimeString()}
               </span>
