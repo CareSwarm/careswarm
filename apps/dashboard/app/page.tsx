@@ -21,14 +21,50 @@ function LiveHome() {
   );
 }
 
+const PROOF = [
+  { href: 'https://www.youtube.com/watch?v=w6OD7jEVB4E', label: '▶ Demo video' },
+  { href: 'https://github.com/CareSwarm/careswarm', label: '💻 Source' },
+  { href: '/economy', label: '⛓ Verify on-chain' },
+  { href: 'https://github.com/CareSwarm/careswarm/blob/main/logs/sample-run.jsonl', label: '📄 Audit log' },
+];
+
+// Capabilities + proof links — gives a judge instant credibility and a path to
+// verify everything (real video, open source, on-chain, audit log).
+function ProofBar() {
+  return (
+    <div className="panel px-4 py-2.5 mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
+      <span className="text-[var(--muted)]">
+        <span className="text-[var(--accent)] font-medium">QVAC on-device</span> · multi-agent + tool calling ·
+        paid agent-to-agent · MedPsy 1.7B + 4B · on-chain settled · zero cloud AI
+      </span>
+      <div className="ml-auto flex flex-wrap gap-1.5">
+        {PROOF.map((p) => (
+          <a
+            key={p.href}
+            href={p.href}
+            target="_blank"
+            rel="noreferrer"
+            className="px-2.5 py-1 rounded-md border border-[var(--border)] text-[var(--muted)] hover:text-[var(--accent)] hover:border-[var(--accent)]/40 transition-colors whitespace-nowrap"
+          >
+            {p.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function ReplayHome() {
   const { live, result, play, playing, prompt } = useReplay();
   return (
-    <Split
-      chat={<Chat live={live} replayResult={result} onReplay={play} replaying={playing} recordedPrompt={prompt} />}
-      caption="Replay of a real on-device run — the recorded swarm, step by step. The AI itself runs locally via QVAC (see the video)."
-      live={live}
-    />
+    <>
+      <ProofBar />
+      <Split
+        chat={<Chat live={live} replayResult={result} onReplay={play} replaying={playing} recordedPrompt={prompt} />}
+        caption="Replay of a real on-device run — the recorded swarm, step by step. The AI itself runs locally via QVAC (see the video)."
+        live={live}
+      />
+    </>
   );
 }
 

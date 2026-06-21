@@ -269,9 +269,9 @@ export default function Chat({
         )}
 
         {thinking && (
-          <details className="panel px-3 py-2 text-xs">
-            <summary className="cursor-pointer text-[var(--accent2)]">🧠 clinician thinking ({thinking.length} chars)</summary>
-            <pre className="whitespace-pre-wrap text-[var(--muted)] mt-2 max-h-48 overflow-y-auto scrollbar-thin">{thinking}</pre>
+          <details open className="panel px-3 py-2 text-xs">
+            <summary className="cursor-pointer text-[var(--accent2)]">🧠 clinician reasoning — MedPsy-4B thinking trace ({thinking.length} chars)</summary>
+            <pre className="whitespace-pre-wrap text-[var(--muted)] mt-2 max-h-56 overflow-y-auto scrollbar-thin">{thinking}</pre>
           </details>
         )}
 
