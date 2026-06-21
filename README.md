@@ -117,6 +117,25 @@ Every model load/unload and every inference appends a JSONL line to `logs/qvac-a
 
 `logs/sample-run.jsonl` is the committed log of the demo-video run. The `/metrics` dashboard page charts the same file live. Payment receipts in the log cross-link to the ledger's hash chain (`/economy` page verifies the chain end-to-end).
 
+## Verify the on-chain anchor
+
+Settlement on Plasma testnet is a **0-value notarization**, not a token transfer. The local USDT ledger is a sha256 hash chain (each receipt commits to the previous via `prev_hash`); a checkpoint tx writes the chain *head* into its calldata as `careswarm:<head>:<digest>`. Anchoring that one hash proves the whole off-chain ledger can't be rewritten — without paying gas per micropayment.
+
+One command checks it end-to-end — it pulls the live tx, decodes the calldata, and walks the receipt chain from that head back to genesis:
+
+```bash
+node scripts/verify-onchain.mjs
+```
+
+```
+on-chain tx   : 0x7a07094778177363dda884995a626cba40f1be1cbeecd9b828ac45a3dc00afb0
+calldata      : careswarm:9db436aa…:048a5be1…
+anchored head : 9db436aa…  →  20 receipts to genesis, links intact ✓
+✓ VERIFIED — the on-chain head is the tip of an unbroken sha256 receipt chain.
+```
+
+The tx is public on [Plasmascan](https://testnet.plasmascan.to/tx/0x7a07094778177363dda884995a626cba40f1be1cbeecd9b828ac45a3dc00afb0). Checkpoints are periodic, so newer receipts stay off-chain until the next anchor.
+
 ## QVAC usage map
 
 | QVAC capability | Where |
